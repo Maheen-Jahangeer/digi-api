@@ -5,9 +5,12 @@ import morgan from 'morgan'
 import cors from 'cors'
 import moongose from 'mongoose'
 import adminRouter from './src/routes/admin'
+import productRouter from './src/routes/Products'
+import bodyParser from 'body-parser'
 
 const app = express()
 app.use(express.json())
+app.use(bodyParser.json())
 dotenv.config()
 
 //database connection
@@ -27,9 +30,11 @@ moongose.connect(ports.mongoDbUrl.toString(), (err) => {
 app.use(helmet())
 // app.use(morgan());
 app.use(cors())
+app.use(bodyParser.urlencoded({extended:true}))
 
 //endpoints
 app.use('/admin', adminRouter)
+app.use('/product', productRouter)
 
 app.listen(ports.hostPort, () => {
     console.log(`Server is running on port ${ports.hostPort}`)
